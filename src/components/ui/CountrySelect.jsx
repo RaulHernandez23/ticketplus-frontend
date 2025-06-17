@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import RequiredLabel from "./RequiredLabel";
+import { apiFetch } from "../../services/api";
 
 export default function CountrySelect({ value, onChange }) {
     const [countries, setCountries] = useState([]);
@@ -10,13 +11,13 @@ export default function CountrySelect({ value, onChange }) {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch("http://localhost:3000/api/paises/");
-                const data = await res.json();
+                const data = await apiFetch("/api/paises/");
                 setCountries(data);
             } catch (error) {
                 console.error("Error al cargar países:", error);
             }
         };
+
         fetchCountries();
     }, []);
 
