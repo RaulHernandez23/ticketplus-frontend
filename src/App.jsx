@@ -1,10 +1,15 @@
-import Register from './pages/Register';
+// src/App.jsx
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Register from "./pages/Register";
 
 function App() {
   return (
-    <div>
-      <Register />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/registro" element={<Register />} />
+        <Route path="*" element={<div>404 - Página no encontrada</div>} />
+      </Routes>
+    </Router>
   );
 }
 
