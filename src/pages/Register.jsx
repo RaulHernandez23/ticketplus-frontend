@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Input from "../components/ui/Input";
 import RequiredLabel from "../components/ui/RequiredLabel";
-import Button from "../components/ui/Button";
+import PrimaryButton from "../components/ui/PrimaryButton";
+import SecondaryButton from "../components/ui/SecondaryButton";
+import CountrySelect from "../components/ui/CountrySelect";
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -21,7 +23,7 @@ export default function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Datos:", formData);
+        console.log("Datos del formulario:", formData);
     };
 
     return (
@@ -43,7 +45,6 @@ export default function Register() {
                     </h1>
                 </div>
 
-                {/* Leyenda de campos requeridos */}
                 <p className="text-sm text-gray-600 mb-4">
                     Todos los campos marcados con <span className="text-red-500">*</span> son obligatorios
                 </p>
@@ -90,13 +91,11 @@ export default function Register() {
                     {/* País + Código postal */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <RequiredLabel htmlFor="country">País</RequiredLabel>
-                            <Input
-                                id="country"
-                                name="country"
-                                placeholder="Seleccione un país"
+                            <CountrySelect
                                 value={formData.country}
-                                onChange={handleChange}
+                                onChange={(codigo_iso_2) =>
+                                    setFormData((prev) => ({ ...prev, country: codigo_iso_2 }))
+                                }
                             />
                         </div>
                         <div>
@@ -150,18 +149,8 @@ export default function Register() {
 
                     {/* Botones */}
                     <div className="flex flex-col sm:flex-row gap-4 mt-6">
-                        <Button
-                            type="submit"
-                            className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-32"
-                        >
-                            Registrar
-                        </Button>
-                        <Button
-                            type="button"
-                            className="border border-black text-black bg-white w-full sm:w-32"
-                        >
-                            Cancelar
-                        </Button>
+                        <PrimaryButton type="submit">Registrar</PrimaryButton>
+                        <SecondaryButton type="button">Cancelar</SecondaryButton>
                     </div>
                 </form>
             </div>
