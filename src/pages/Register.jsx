@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { apiFetch } from "../services/api";
+import { useEffect } from "react";
 import Input from "../components/ui/Input";
 import RequiredLabel from "../components/ui/RequiredLabel";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -7,6 +8,11 @@ import SecondaryButton from "../components/ui/SecondaryButton";
 import CountrySelect from "../components/ui/CountrySelect";
 
 export default function Register() {
+
+    useEffect(() => {
+        document.title = "TicketPlus - Registro";
+    }, []);
+
     const [formData, setFormData] = useState({
         name: "",
         lastNameFather: "",
@@ -18,20 +24,75 @@ export default function Register() {
         confirmPassword: "",
     });
 
+    
+
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
-        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        // Limpiar el error si existe
+        if (errors[name]) {
+            setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors[name];
+                return newErrors;
+            });
+        }
+    };
+
+    const handleFieldBlur = (e) => {
+        const { name, value } = e.target;
+        const newErrors = { ...errors };
+
+        switch (name) {
+            case "email":
+                if (!value.trim()) {
+                    newErrors.email = "El correo es obligatorio.";
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                    newErrors.email = "El correo no tiene un formato válido.";
+                } else {
+                    delete newErrors.email;
+                }
+                break;
+            case "password":
+                if (!value) {
+                    newErrors.password = "La contraseña es obligatoria.";
+                } else if (value.length < 8) {
+                    newErrors.password = "La contraseña debe tener al menos 8 caracteres.";
+                } else {
+                    delete newErrors.password;
+                }
+                break;
+            case "confirmPassword":
+                if (!value) {
+                    newErrors.confirmPassword = "Debes confirmar la contraseña.";
+                } else if (value !== formData.password) {
+                    newErrors.confirmPassword = "Las contraseñas no coinciden.";
+                } else {
+                    delete newErrors.confirmPassword;
+                }
+                break;
+            default:
+                if (!value.trim()) {
+                    newErrors[name] = "Este campo es obligatorio.";
+                } else {
+                    delete newErrors[name];
+                }
+                break;
+        }
+
+        setErrors(newErrors);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {};
 
-        // Validaciones
+        // Validaciones completas al enviar
         if (!formData.name.trim()) newErrors.name = "El nombre es obligatorio.";
-        if (!formData.lastNameFather.trim())
-            newErrors.lastNameFather = "El apellido paterno es obligatorio.";
+        if (!formData.lastNameFather.trim()) newErrors.lastNameFather = "El apellido paterno es obligatorio.";
         if (!formData.email.trim()) {
             newErrors.email = "El correo es obligatorio.";
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -47,15 +108,12 @@ export default function Register() {
         } else if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = "Las contraseñas no coinciden.";
         }
-        if (!formData.postalCode.trim())
-            newErrors.postalCode = "El código postal es obligatorio.";
-        if (!formData.country)
-            newErrors.country = "Debes seleccionar un país.";
+        if (!formData.postalCode.trim()) newErrors.postalCode = "El código postal es obligatorio.";
+        if (!formData.country) newErrors.country = "Debes seleccionar un país.";
 
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            // Preparar el body para el backend
             const payload = {
                 nombre: formData.name,
                 apellido_paterno: formData.lastNameFather,
@@ -67,10 +125,8 @@ export default function Register() {
                 id_pais: formData.country,
             };
 
-            console.log("Payload para registro:", payload);
-
             try {
-                const result = await apiFetch("/api/usuarios/registro", {
+                await apiFetch("/api/usuarios/registro", {
                     method: "POST",
                     body: JSON.stringify(payload),
                 });
@@ -89,11 +145,22 @@ export default function Register() {
                 setErrors({});
             } catch (error) {
                 console.error("Error en registro:", error);
-                alert("Error al conectar con el servidor.");
+
+                let message = "No se pudo completar el registro. ";
+
+                try {
+                    const parsed = JSON.parse(error.message.replace(/^Error \d+:\s*/, ""));
+                    if (parsed.mensaje) {
+                        message += parsed.mensaje;
+                    }
+                } catch {
+                    message += "Por favor, inténtalo de nuevo más tarde.";
+                }
+
+                alert(message);
             }
         }
     };
-
 
     return (
         <div className="min-h-screen bg-white flex flex-col md:flex-row">
@@ -129,6 +196,7 @@ export default function Register() {
                                 placeholder="Nombre"
                                 value={formData.name}
                                 onChange={handleChange}
+                                onBlur={handleFieldBlur}
                             />
                             {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                         </div>
@@ -140,6 +208,7 @@ export default function Register() {
                                 placeholder="Apellido paterno"
                                 value={formData.lastNameFather}
                                 onChange={handleChange}
+                                onBlur={handleFieldBlur}
                             />
                             {errors.lastNameFather && <p className="text-red-500 text-sm">{errors.lastNameFather}</p>}
                         </div>
@@ -147,15 +216,14 @@ export default function Register() {
 
                     {/* Apellido materno */}
                     <div className="w-full sm:w-1/2">
-                        <RequiredLabel htmlFor="lastNameMother" required={false}>
-                            Apellido materno
-                        </RequiredLabel>
+                        <RequiredLabel htmlFor="lastNameMother" required={false}>Apellido materno</RequiredLabel>
                         <Input
                             id="lastNameMother"
                             name="lastNameMother"
                             placeholder="Apellido materno"
                             value={formData.lastNameMother}
                             onChange={handleChange}
+                            onBlur={handleFieldBlur}
                         />
                     </div>
 
@@ -164,9 +232,16 @@ export default function Register() {
                         <div>
                             <CountrySelect
                                 value={formData.country}
-                                onChange={(id_pais) =>
-                                    setFormData((prev) => ({ ...prev, country: id_pais }))
-                                }
+                                onChange={(id_pais) => {
+                                    setFormData((prev) => ({ ...prev, country: id_pais }));
+                                    if (errors.country) {
+                                        setErrors((prev) => {
+                                            const updated = { ...prev };
+                                            delete updated.country;
+                                            return updated;
+                                        });
+                                    }
+                                }}
                             />
                             {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
                         </div>
@@ -178,6 +253,7 @@ export default function Register() {
                                 placeholder="Código Postal"
                                 value={formData.postalCode}
                                 onChange={handleChange}
+                                onBlur={handleFieldBlur}
                             />
                             {errors.postalCode && <p className="text-red-500 text-sm">{errors.postalCode}</p>}
                         </div>
@@ -193,6 +269,7 @@ export default function Register() {
                             type="email"
                             value={formData.email}
                             onChange={handleChange}
+                            onBlur={handleFieldBlur}
                         />
                         {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                     </div>
@@ -207,6 +284,7 @@ export default function Register() {
                                 type="password"
                                 value={formData.password}
                                 onChange={handleChange}
+                                onBlur={handleFieldBlur}
                             />
                             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                         </div>
@@ -218,6 +296,7 @@ export default function Register() {
                                 type="password"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
+                                onBlur={handleFieldBlur}
                             />
                             {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
                         </div>
