@@ -6,8 +6,11 @@ import RequiredLabel from "../components/ui/RequiredLabel";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import SecondaryButton from "../components/ui/SecondaryButton";
 import CountrySelect from "../components/ui/CountrySelect";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "TicketPlus - Registro";
@@ -24,7 +27,7 @@ export default function Register() {
         confirmPassword: "",
     });
 
-    
+
 
     const [errors, setErrors] = useState({});
 
@@ -143,6 +146,7 @@ export default function Register() {
                     confirmPassword: "",
                 });
                 setErrors({});
+                navigate("/iniciar-sesion");
             } catch (error) {
                 console.error("Error en registro:", error);
 
@@ -305,7 +309,14 @@ export default function Register() {
                     {/* Botones */}
                     <div className="flex flex-col sm:flex-row gap-4 mt-6">
                         <PrimaryButton type="submit">Registrar</PrimaryButton>
-                        <SecondaryButton type="button">Cancelar</SecondaryButton>
+                        <SecondaryButton type="button"
+                            onClick={() => {
+                                if (window.history.length > 2) {
+                                    navigate(-1);
+                                } else {
+                                    navigate("/search-event");
+                                }
+                            }}>Cancelar</SecondaryButton>
                     </div>
                 </form>
             </div>
