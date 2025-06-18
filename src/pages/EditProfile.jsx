@@ -21,13 +21,28 @@ export default function EditProfile() {
         country: usuario.id_pais,
         postalCode: usuario.codigo_postal,
         email: usuario.correo,
-        password: "",
+        currentPassword: "",
+        newPassword: "",
         confirmPassword: "",
     });
+
+    const [passwordError, setPasswordError] = useState("");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+
+        if (name === "newPassword" || name === "confirmPassword") {
+            if (
+                formData.newPassword &&
+                formData.confirmPassword &&
+                formData.newPassword !== formData.confirmPassword
+            ) {
+                setPasswordError("Las nuevas contraseñas no coinciden.");
+            } else {
+                setPasswordError("");
+            }
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -39,14 +54,27 @@ export default function EditProfile() {
             return;
         }
 
-        // Validar si se intenta cambiar contraseña sin confirmarla
-        if (formData.password && !formData.confirmPassword) {
-            alert("Si cambias la contraseña, debes confirmarla.");
-            return;
+        const changingPassword =
+            formData.currentPassword || formData.newPassword || formData.confirmPassword;
+
+        if (changingPassword) {
+            if (
+                !formData.currentPassword ||
+                !formData.newPassword ||
+                !formData.confirmPassword
+            ) {
+                setPasswordError("Debes completar todos los campos de contraseña.");
+                return;
+            }
+
+            if (formData.newPassword !== formData.confirmPassword) {
+                setPasswordError("Las nuevas contraseñas no coinciden.");
+                return;
+            }
         }
 
-        // Construir el payload con los campos obligatorios
         const payload = {
+            id_usuario: usuario.id_usuario,
             nombre: formData.name,
             apellido_paterno: formData.lastNameFather,
             apellido_materno: formData.lastNameMother || "",
@@ -55,10 +83,10 @@ export default function EditProfile() {
             id_pais: formData.country,
         };
 
-        // Agregar contraseñas solo si se desea actualizar
-        if (formData.password) {
-            payload.contrasena = formData.password;
-            payload.confirmar_contrasena = formData.confirmPassword;
+        if (changingPassword) {
+            payload.contraseña_actual = formData.currentPassword;
+            payload.nueva_contraseña = formData.newPassword;
+            payload.confirmar_contraseña = formData.confirmPassword;
         }
 
         try {
@@ -67,11 +95,24 @@ export default function EditProfile() {
                 body: JSON.stringify(payload),
                 headers: {
                     "x-token": token,
+                    "Content-Type": "application/json",
                 },
             });
 
             alert("Perfil actualizado correctamente.");
+            
+            const usuarioActualizado = await apiFetch(`/api/usuarios/recuperar-perfil/${usuario.id_usuario}`, {
+                method: "GET",
+                headers: {
+                    "x-token": token,
+                },
+            });
+
+            localStorage.setItem("usuario", JSON.stringify(usuarioActualizado));
+
+            window.location.reload();
             console.log("Respuesta:", response);
+            setPasswordError("");
         } catch (error) {
             console.error("Error al actualizar perfil:", error);
             let msg = "No se pudo actualizar el perfil.";
@@ -82,6 +123,7 @@ export default function EditProfile() {
             alert(msg);
         }
     };
+
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <TopNavbar />
@@ -176,27 +218,43 @@ export default function EditProfile() {
 
                         {/* Contraseñas */}
                         <div>
-                            <Label htmlFor="password">Contraseña actual:</Label>
+                            <Label htmlFor="currentPassword">Contraseña actual:</Label>
                             <Input
-                                id="password"
-                                name="password"
+                                id="currentPassword"
+                                name="currentPassword"
                                 type="password"
                                 placeholder="Contraseña actual"
-                                value={formData.password}
+                                autoComplete="new-password"
+                                value={formData.currentPassword}
                                 onChange={handleChange}
                             />
                         </div>
 
                         <div>
-                            <Label htmlFor="confirmPassword">Nueva contraseña:</Label>
+                            <Label htmlFor="newPassword">Nueva contraseña:</Label>
+                            <Input
+                                id="newPassword"
+                                name="newPassword"
+                                type="password"
+                                placeholder="Nueva contraseña"
+                                value={formData.newPassword}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="confirmPassword">Confirmar nueva contraseña:</Label>
                             <Input
                                 id="confirmPassword"
                                 name="confirmPassword"
                                 type="password"
-                                placeholder="Nueva contraseña"
+                                placeholder="Confirmar nueva contraseña"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                             />
+                            {passwordError && (
+                                <p className="text-sm text-red-600 mt-1">{passwordError}</p>
+                            )}
                         </div>
 
                         {/* Botones */}
