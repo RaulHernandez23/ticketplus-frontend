@@ -98,7 +98,7 @@ export default function Register() {
     return (
         <div className="min-h-screen bg-white flex flex-col md:flex-row">
             {/* Imagen lateral */}
-            <div className="w-full md:w-1/2 hidden md:block">
+            <div className="w-full md:w-2/5 hidden md:block">
                 <img
                     src="/fondo-registro.jpg"
                     alt="Concierto"
