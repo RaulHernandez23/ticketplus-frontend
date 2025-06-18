@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { apiFetch } from "../services/api";
 import Input from "../components/ui/Input";
-import RequiredLabel from "../components/ui/RequiredLabel";
+import Label from "../components/ui/Label";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import SecondaryButton from "../components/ui/SecondaryButton";
 import CountrySelect from "../components/ui/CountrySelect";
@@ -11,14 +12,17 @@ export default function EditProfile() {
         document.title = "TicketPlus - Editar perfil";
     }, []);
 
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+
     const [formData, setFormData] = useState({
-        name: "Miguel",
-        lastName: "Villa",
-        country: 1,
-        postalCode: "91155",
-        email: "soyunpokemonytunoloeres@gmail.com",
-        currentPassword: "",
-        newPassword: "",
+        name: usuario.nombre,
+        lastNameFather: usuario.apellido_paterno,
+        lastNameMother: usuario.apellido_materno || "",
+        country: usuario.id_pais,
+        postalCode: usuario.codigo_postal,
+        email: usuario.correo,
+        password: "",
+        confirmPassword: "",
     });
 
     const handleChange = (e) => {
@@ -26,21 +30,65 @@ export default function EditProfile() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Datos enviados:", formData);
-        // Aquí podrías hacer un apiFetch para actualizar
-    };
 
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("No hay sesión activa.");
+            return;
+        }
+
+        // Validar si se intenta cambiar contraseña sin confirmarla
+        if (formData.password && !formData.confirmPassword) {
+            alert("Si cambias la contraseña, debes confirmarla.");
+            return;
+        }
+
+        // Construir el payload con los campos obligatorios
+        const payload = {
+            nombre: formData.name,
+            apellido_paterno: formData.lastNameFather,
+            apellido_materno: formData.lastNameMother || "",
+            correo: formData.email,
+            codigo_postal: formData.postalCode,
+            id_pais: formData.country,
+        };
+
+        // Agregar contraseñas solo si se desea actualizar
+        if (formData.password) {
+            payload.contrasena = formData.password;
+            payload.confirmar_contrasena = formData.confirmPassword;
+        }
+
+        try {
+            const response = await apiFetch("/api/usuarios/actualizar-perfil", {
+                method: "PUT",
+                body: JSON.stringify(payload),
+                headers: {
+                    "x-token": token,
+                },
+            });
+
+            alert("Perfil actualizado correctamente.");
+            console.log("Respuesta:", response);
+        } catch (error) {
+            console.error("Error al actualizar perfil:", error);
+            let msg = "No se pudo actualizar el perfil.";
+            try {
+                const parsed = JSON.parse(error.message.replace(/^Error \d+:\s*/, ""));
+                if (parsed.mensaje) msg = parsed.mensaje;
+            } catch { }
+            alert(msg);
+        }
+    };
     return (
         <div className="min-h-screen bg-white flex flex-col">
-            {/* Barra superior reutilizable */}
             <TopNavbar />
 
-            {/* Contenido principal */}
             <div className="flex flex-1">
                 {/* Imagen lateral */}
-                <div className="w-1/2 hidden md:block">
+                <div className="w-2/5 hidden md:block">
                     <img
                         src="/fondo-registro.jpg"
                         alt="Concierto"
@@ -49,32 +97,46 @@ export default function EditProfile() {
                 </div>
 
                 {/* Formulario */}
-                <div className="w-full md:w-1/2 px-6 sm:px-10 py-10">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-6">
-                        Editar datos
+                <div className="w-full md:w-3/5 px-6 sm:px-10 py-10">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-4">
+                        Editar perfil
                     </h1>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        {/* Nombre y Apellido */}
+                        {/* Nombre y Apellido paterno */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <RequiredLabel htmlFor="name">Nombre</RequiredLabel>
+                                <Label htmlFor="name">Nombre</Label>
                                 <Input
                                     id="name"
                                     name="name"
+                                    placeholder="Nombre"
                                     value={formData.name}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
-                                <RequiredLabel htmlFor="lastName">Apellido</RequiredLabel>
+                                <Label htmlFor="lastNameFather">Apellido paterno</Label>
                                 <Input
-                                    id="lastName"
-                                    name="lastName"
-                                    value={formData.lastName}
+                                    id="lastNameFather"
+                                    name="lastNameFather"
+                                    placeholder="Apellido paterno"
+                                    value={formData.lastNameFather}
                                     onChange={handleChange}
                                 />
                             </div>
+                        </div>
+
+                        {/* Apellido materno */}
+                        <div className="w-full sm:w-1/2">
+                            <Label htmlFor="lastNameMother">Apellido materno</Label>
+                            <Input
+                                id="lastNameMother"
+                                name="lastNameMother"
+                                placeholder="Apellido materno"
+                                value={formData.lastNameMother}
+                                onChange={handleChange}
+                            />
                         </div>
 
                         {/* País y Código Postal */}
@@ -88,10 +150,11 @@ export default function EditProfile() {
                                 />
                             </div>
                             <div>
-                                <RequiredLabel htmlFor="postalCode">Código Postal</RequiredLabel>
+                                <Label htmlFor="postalCode">Código Postal</Label>
                                 <Input
                                     id="postalCode"
                                     name="postalCode"
+                                    placeholder="Código Postal"
                                     value={formData.postalCode}
                                     onChange={handleChange}
                                 />
@@ -100,10 +163,11 @@ export default function EditProfile() {
 
                         {/* Correo electrónico */}
                         <div>
-                            <RequiredLabel htmlFor="email">Correo electrónico</RequiredLabel>
+                            <Label htmlFor="email">Correo electrónico</Label>
                             <Input
                                 id="email"
                                 name="email"
+                                placeholder="Correo"
                                 type="email"
                                 value={formData.email}
                                 onChange={handleChange}
@@ -112,23 +176,25 @@ export default function EditProfile() {
 
                         {/* Contraseñas */}
                         <div>
-                            <RequiredLabel htmlFor="currentPassword">Contraseña actual:</RequiredLabel>
+                            <Label htmlFor="password">Contraseña actual:</Label>
                             <Input
-                                id="currentPassword"
-                                name="currentPassword"
+                                id="password"
+                                name="password"
                                 type="password"
-                                value={formData.currentPassword}
+                                placeholder="Contraseña actual"
+                                value={formData.password}
                                 onChange={handleChange}
                             />
                         </div>
 
                         <div>
-                            <RequiredLabel htmlFor="newPassword">Nueva contraseña:</RequiredLabel>
+                            <Label htmlFor="confirmPassword">Nueva contraseña:</Label>
                             <Input
-                                id="newPassword"
-                                name="newPassword"
+                                id="confirmPassword"
+                                name="confirmPassword"
                                 type="password"
-                                value={formData.newPassword}
+                                placeholder="Nueva contraseña"
+                                value={formData.confirmPassword}
                                 onChange={handleChange}
                             />
                         </div>

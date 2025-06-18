@@ -86,6 +86,8 @@ export default function Login() {
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("usuario", JSON.stringify(res.usuario));
 
+                console.log(localStorage.getItem("usuario"));
+
                 navigate("/dashboard");
             } catch (error) {
                 let msg = "No se pudo iniciar sesión.";
