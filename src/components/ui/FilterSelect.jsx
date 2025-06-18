@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { apiFetch } from "../../services/api"; // asegúrate de tener esta función
+import { apiFetch } from "../../services/api"; 
 
 export default function SelectFiltro({ value, onChange }) {
   const [options, setOptions] = useState([]);
