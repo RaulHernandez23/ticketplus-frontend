@@ -16,18 +16,15 @@ export default function Sidebar({ isOpen, onClose }) {
                 },
             });
 
-            localStorage.removeItem("token");
-            localStorage.removeItem("usuario");
+            localStorage.clear();
+            window.location.reload();
 
-            // CAMBIAR AL DASHBOARD CUANDO SE HAYA IMPLEMENTADO
-            // navigate("/dashboard");
-            navigate("/iniciar-sesion");
         } catch (error) {
             console.error("Error al cerrar sesión:", error);
             alert("No se pudo cerrar sesión.");
         }
     };
-    
+
     if (!isOpen) return null;
 
     return (
