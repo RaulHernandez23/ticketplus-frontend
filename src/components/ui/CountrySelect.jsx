@@ -21,7 +21,7 @@ export default function CountrySelect({ value, onChange }) {
         fetchCountries();
     }, []);
 
-    const selected = countries.find((c) => c.codigo_iso_2 === value);
+    const selected = countries.find((c) => c.id_pais === value);
 
     const handleBlur = (e) => {
         if (!dropdownRef.current?.contains(e.relatedTarget)) {
@@ -51,7 +51,7 @@ export default function CountrySelect({ value, onChange }) {
             e.preventDefault();
             const country = countries[highlightedIndex];
             if (country) {
-                onChange(country.codigo_iso_2);
+                onChange(country.id_pais); // ✅ Enviar id_pais
                 setShowDropdown(false);
                 setHighlightedIndex(-1);
             }
@@ -106,9 +106,9 @@ export default function CountrySelect({ value, onChange }) {
                 >
                     {countries.map((c, index) => (
                         <li
-                            key={c.codigo_iso_2}
+                            key={c.id_pais}
                             onClick={() => {
-                                onChange(c.codigo_iso_2);
+                                onChange(c.id_pais); // ✅ Enviar id_pais
                                 setShowDropdown(false);
                                 setHighlightedIndex(-1);
                             }}

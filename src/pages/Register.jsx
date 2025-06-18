@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiFetch } from "../services/api";
 import Input from "../components/ui/Input";
 import RequiredLabel from "../components/ui/RequiredLabel";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -17,14 +18,82 @@ export default function Register() {
         confirmPassword: "",
     });
 
+    const [errors, setErrors] = useState({});
+
     const handleChange = (e) => {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Datos del formulario:", formData);
+        const newErrors = {};
+
+        // Validaciones
+        if (!formData.name.trim()) newErrors.name = "El nombre es obligatorio.";
+        if (!formData.lastNameFather.trim())
+            newErrors.lastNameFather = "El apellido paterno es obligatorio.";
+        if (!formData.email.trim()) {
+            newErrors.email = "El correo es obligatorio.";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = "El correo no tiene un formato válido.";
+        }
+        if (!formData.password) {
+            newErrors.password = "La contraseña es obligatoria.";
+        } else if (formData.password.length < 8) {
+            newErrors.password = "La contraseña debe tener al menos 8 caracteres.";
+        }
+        if (!formData.confirmPassword) {
+            newErrors.confirmPassword = "Debes confirmar la contraseña.";
+        } else if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = "Las contraseñas no coinciden.";
+        }
+        if (!formData.postalCode.trim())
+            newErrors.postalCode = "El código postal es obligatorio.";
+        if (!formData.country)
+            newErrors.country = "Debes seleccionar un país.";
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length === 0) {
+            // Preparar el body para el backend
+            const payload = {
+                nombre: formData.name,
+                apellido_paterno: formData.lastNameFather,
+                apellido_materno: formData.lastNameMother || "",
+                correo: formData.email,
+                contrasena: formData.password,
+                confirmar_contrasena: formData.confirmPassword,
+                codigo_postal: formData.postalCode,
+                id_pais: formData.country,
+            };
+
+            console.log("Payload para registro:", payload);
+
+            try {
+                const result = await apiFetch("/api/usuarios/registro", {
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                });
+
+                alert("Registro exitoso.");
+                setFormData({
+                    name: "",
+                    lastNameFather: "",
+                    lastNameMother: "",
+                    country: "",
+                    postalCode: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                });
+                setErrors({});
+            } catch (error) {
+                console.error("Error en registro:", error);
+                alert("Error al conectar con el servidor.");
+            }
+        }
     };
+
 
     return (
         <div className="min-h-screen bg-white flex flex-col md:flex-row">
@@ -61,6 +130,7 @@ export default function Register() {
                                 value={formData.name}
                                 onChange={handleChange}
                             />
+                            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                         </div>
                         <div>
                             <RequiredLabel htmlFor="lastNameFather">Apellido paterno</RequiredLabel>
@@ -71,6 +141,7 @@ export default function Register() {
                                 value={formData.lastNameFather}
                                 onChange={handleChange}
                             />
+                            {errors.lastNameFather && <p className="text-red-500 text-sm">{errors.lastNameFather}</p>}
                         </div>
                     </div>
 
@@ -93,10 +164,11 @@ export default function Register() {
                         <div>
                             <CountrySelect
                                 value={formData.country}
-                                onChange={(codigo_iso_2) =>
-                                    setFormData((prev) => ({ ...prev, country: codigo_iso_2 }))
+                                onChange={(id_pais) =>
+                                    setFormData((prev) => ({ ...prev, country: id_pais }))
                                 }
                             />
+                            {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
                         </div>
                         <div>
                             <RequiredLabel htmlFor="postalCode">Código Postal</RequiredLabel>
@@ -107,6 +179,7 @@ export default function Register() {
                                 value={formData.postalCode}
                                 onChange={handleChange}
                             />
+                            {errors.postalCode && <p className="text-red-500 text-sm">{errors.postalCode}</p>}
                         </div>
                     </div>
 
@@ -121,6 +194,7 @@ export default function Register() {
                             value={formData.email}
                             onChange={handleChange}
                         />
+                        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                     </div>
 
                     {/* Contraseñas */}
@@ -134,6 +208,7 @@ export default function Register() {
                                 value={formData.password}
                                 onChange={handleChange}
                             />
+                            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                         </div>
                         <div>
                             <RequiredLabel htmlFor="confirmPassword">Confirmar contraseña</RequiredLabel>
@@ -144,6 +219,7 @@ export default function Register() {
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                             />
+                            {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
                         </div>
                     </div>
 
