@@ -1,4 +1,33 @@
+import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../../services/api";
+
 export default function Sidebar({ isOpen, onClose }) {
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        try {
+            await apiFetch("/api/auth/logout", {
+                method: "POST",
+                headers: {
+                    "x-token": token,
+                },
+            });
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("usuario");
+
+            // CAMBIAR AL DASHBOARD CUANDO SE HAYA IMPLEMENTADO
+            // navigate("/dashboard");
+            navigate("/iniciar-sesion");
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
+            alert("No se pudo cerrar sesión.");
+        }
+    };
+    
     if (!isOpen) return null;
 
     return (
@@ -43,7 +72,9 @@ export default function Sidebar({ isOpen, onClose }) {
                         </ul>
                     </section>
 
-                    <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded text-base hover:bg-blue-700">
+                    <button
+                        onClick={handleLogout}
+                        className="mt-6 w-full bg-blue-600 text-white py-2 rounded text-base hover:bg-blue-700">
                         🔒 Cerrar sesión
                     </button>
                 </div>
