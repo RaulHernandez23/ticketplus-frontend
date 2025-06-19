@@ -5,8 +5,7 @@ import Label from "../components/ui/Label";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import SecondaryButton from "../components/ui/SecondaryButton";
 import CountrySelect from "../components/ui/CountrySelect";
-import TopNavbar from "../components/ui/TopNavBar";
-
+import TopBar from "../components/ui/TopBar";
 export default function EditProfile() {
     useEffect(() => {
         document.title = "TicketPlus - Editar perfil";
@@ -126,7 +125,7 @@ export default function EditProfile() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
-            <TopNavbar />
+            <TopBar />
 
             <div className="flex flex-1">
                 {/* Imagen lateral */}

@@ -1,17 +1,31 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { ImTicket } from "react-icons/im";
 import { GiMicrophone } from "react-icons/gi";
 import { FaQuestion, FaUser } from "react-icons/fa";
 import Sidebar from "./Sidebar";
+import Sidebar from "./Sidebar";
 
 export default function TopBar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const buttons = [
     { label: "Eventos", icon: <ImTicket size={20} color="#2D3FBD" /> },
     { label: "Artistas", icon: <GiMicrophone size={20} color="#2D3FBD" /> },
     { label: "Soporte", icon: <FaQuestion size={20} color="#2D3FBD" /> },
   ];
+
+  const handleUserClick = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setSidebarOpen(true);
+    } else {
+      navigate("/iniciar-sesion");
+    }
+  };
 
   return (
     <>

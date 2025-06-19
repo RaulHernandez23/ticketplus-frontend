@@ -86,9 +86,7 @@ export default function Login() {
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("usuario", JSON.stringify(res.usuario));
 
-                console.log(localStorage.getItem("usuario"));
-
-                navigate("/dashboard");
+                navigate("/search-event");
             } catch (error) {
                 let msg = "No se pudo iniciar sesión.";
                 try {
@@ -148,9 +146,9 @@ export default function Login() {
                         </div>
 
                         <div className="text-right text-sm">
-                            <a href="#" className="text-blue-600 hover:underline">
+                            <Link to="/recuperar-contrasena" className="text-blue-700 hover:underline font-medium">
                                 Olvidé mi contraseña
-                            </a>
+                            </Link>
                         </div>
 
                         <div className="flex justify-center mt-4">

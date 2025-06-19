@@ -16,18 +16,16 @@ export default function Sidebar({ isOpen, onClose }) {
                 },
             });
 
-            localStorage.removeItem("token");
-            localStorage.removeItem("usuario");
+            localStorage.clear();
+            navigate("/search-event");
+            window.location.reload();
 
-            // CAMBIAR AL DASHBOARD CUANDO SE HAYA IMPLEMENTADO
-            // navigate("/dashboard");
-            navigate("/iniciar-sesion");
         } catch (error) {
             console.error("Error al cerrar sesión:", error);
             alert("No se pudo cerrar sesión.");
         }
     };
-    
+
     if (!isOpen) return null;
 
     return (
@@ -67,7 +65,7 @@ export default function Sidebar({ isOpen, onClose }) {
                     <section className="mb-6">
                         <h3 className="text-base font-semibold text-gray-600 mb-3">Mi cuenta</h3>
                         <ul className="space-y-2">
-                            <li><a href="#">👤 Datos de la cuenta</a></li>
+                            <li><a href="/editar-perfil">👤 Datos de la cuenta</a></li>
                             <li><a href="#">💳 Métodos de pago</a></li>
                         </ul>
                     </section>
