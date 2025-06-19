@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { ImTicket } from "react-icons/im";
 import { GiMicrophone } from "react-icons/gi";
 import { FaQuestion, FaUser } from "react-icons/fa";
-import Sidebar from "./Sidebar";
 import Sidebar from "./Sidebar";
 
 export default function TopBar() {
