@@ -2,19 +2,37 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TopBar from "../components/ui/TopBar";
 import PrimaryButton from "../components/ui/PrimaryButton";
+import { apiFetch } from "../services/api";
 
 export default function ViewProfile() {
     const navigate = useNavigate();
     const [usuario, setUsuario] = useState(null);
+    const [pais, setPais] = useState(null);
+
 
     useEffect(() => {
         document.title = "TicketPlus - Mi perfil";
 
         const storedUser = localStorage.getItem("usuario");
         if (storedUser) {
-            setUsuario(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUsuario(parsedUser);
+
+            if (parsedUser.id_pais) {
+                fetchCountry(parsedUser.id_pais);
+            }
         }
     }, []);
+
+    const fetchCountry = async (id) => {
+        try {
+            const data = await apiFetch(`/api/paises/${id}`);
+            setPais(data.pais);
+        } catch (error) {
+            console.error("Error al obtener país:", error);
+            setPais("—");
+        }
+    };
 
     if (!usuario) {
         return (
@@ -49,8 +67,8 @@ export default function ViewProfile() {
                         <p><strong>Apellido paterno:</strong> {usuario.apellido_paterno}</p>
                         <p><strong>Apellido materno:</strong> {usuario.apellido_materno || "—"}</p>
                         <p><strong>Correo electrónico:</strong> {usuario.correo}</p>
-                        <p><strong>Código postal:</strong> {usuario.codigo_postal || "—"}</p>
-                        <p><strong>ID país:</strong> {usuario.id_pais || "—"}</p>
+                        <p><strong>Código postal:</strong> {usuario.codigo_postal}</p>
+                        <p><strong>País:</strong> {pais}</p>
                     </div>
 
                     <div className="mt-8">
