@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SeatTable from "../components/ui/SeatTable";
@@ -5,6 +6,8 @@ import TopBar from "../components/ui/TopBar";
 
 export default function EventDetails() {
   const { id_evento } = useParams();
+  const navigate = useNavigate();
+
   const [evento, setEvento] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,51 +36,73 @@ export default function EventDetails() {
   } = evento;
 
   return (
-    <div className="bg-white min-h-screen text-black">
+    <div className="bg-white min-h-screen text-black w-full">
       <TopBar />
-      <div className="max-w-screen-2xl mx-auto p-6">
-        <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">
-          {titulo}
+
+      <div className="w-full px-8 py-6">
+        <h2 className="text-4xl font-bold text-center text-blue-800 mb-8">
+          Detalles del Evento
         </h2>
 
-        {banner_base64 && (
-          <div className="flex justify-center mb-6">
-            <img
-              src={banner_base64}
-              alt={`Banner de ${titulo}`}
-              className="max-h-96 rounded shadow-lg"
-            />
+        <div className="flex flex-col lg:flex-row gap-10 w-full">
+          {/* Imagen + info lateral */}
+          <div className="w-full lg:w-1/3 flex flex-col items-center">
+            {banner_base64 && (
+              <img
+                src={banner_base64}
+                alt={`Banner de ${titulo}`}
+                className="w-full max-h-96 object-cover rounded-xl shadow-lg"
+              />
+            )}
+            <h3 className="mt-4 text-2xl font-bold text-blue-900">{titulo}</h3>
+
+            <div className="mt-4 text-center text-sm text-gray-800 space-y-2">
+              <div className="flex items-center justify-center gap-2">
+                <span>📍</span>
+                <span>{recinto?.nombre}, {recinto?.ciudad}</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <span>📅</span>
+                <span>
+                  {new Date(fecha_funcion).toLocaleString("es-MX", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </div>
+            </div>
           </div>
-        )}
 
-        <p className="text-lg mb-4"><strong>Descripción:</strong> {descripcion}</p>
+          {/* Info + asiento */}
+          <div className="w-full lg:w-2/3">
+            <div className="mb-4">
+              <h4 className="text-lg font-semibold text-blue-800 mb-2">Descripción</h4>
+              <p className="text-gray-800">{descripcion}</p>
+            </div>
 
-        <p className="text-lg mb-4">
-          <strong>Fecha del evento:</strong>{" "}
-          {new Date(fecha_funcion).toLocaleString("es-MX", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </p>
+            <div className="mt-6">
+              <SeatTable idEvento={id_evento} />
+            </div>
 
-        {recinto && (
-          <>
-            <p className="text-lg mb-2"><strong>Recinto:</strong> {recinto.nombre}</p>
-            <p className="text-lg mb-2">
-              <strong>Dirección:</strong> {recinto.calle} {recinto.numero}, {recinto.ciudad}, {recinto.estado}
-            </p>
-          </>
-        )}
+            <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8">
+              <button
+                className="w-full sm:w-auto py-2 px-6 bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg shadow-md transition"
+              >
+                Comprar Boletos
+              </button>
 
-        <div className="mt-10 mb-10">
-          <h3 className="text-2xl font-semibold text-center mb-4 text-gray-700">
-            Selecciona tus asientos
-          </h3>
-          <SeatTable idEvento={id_evento} />
+              <button
+                onClick={() => navigate("/search-event")} // 👈 Acción de regreso
+                className="w-full sm:w-auto py-2 px-6 bg-[#6C63FF] hover:bg-[#574fd1] text-white font-semibold rounded-lg shadow-md transition"
+              >
+                Regresar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
