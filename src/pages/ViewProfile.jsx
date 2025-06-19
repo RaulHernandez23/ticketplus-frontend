@@ -3,26 +3,35 @@ import { useNavigate } from "react-router-dom";
 import TopBar from "../components/ui/TopBar";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import { apiFetch } from "../services/api";
+import { useAuthValidation } from "../hooks/useAuthValidation"; // asegúrate de importar correctamente
 
 export default function ViewProfile() {
     const navigate = useNavigate();
+    const authStatus = useAuthValidation();
     const [usuario, setUsuario] = useState(null);
     const [pais, setPais] = useState(null);
 
-
     useEffect(() => {
-        document.title = "TicketPlus - Mi perfil";
+        if (authStatus === "no-token" || authStatus === "invalid") {
+            localStorage.clear();
+            navigate("/iniciar-sesion");
+            return;
+        }
 
-        const storedUser = localStorage.getItem("usuario");
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            setUsuario(parsedUser);
+        if (authStatus === "valid") {
+            document.title = "TicketPlus - Mi perfil";
 
-            if (parsedUser.id_pais) {
-                fetchCountry(parsedUser.id_pais);
+            const storedUser = localStorage.getItem("usuario");
+            if (storedUser) {
+                const parsedUser = JSON.parse(storedUser);
+                setUsuario(parsedUser);
+
+                if (parsedUser.id_pais) {
+                    fetchCountry(parsedUser.id_pais);
+                }
             }
         }
-    }, []);
+    }, [authStatus, navigate]);
 
     const fetchCountry = async (id) => {
         try {
@@ -34,7 +43,7 @@ export default function ViewProfile() {
         }
     };
 
-    if (!usuario) {
+    if (authStatus === "loading" || !usuario) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <p className="text-gray-600">Cargando datos del usuario...</p>

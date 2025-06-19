@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import TopBar from "../components/ui/TopBar";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
@@ -6,8 +7,18 @@ import Carousel from "../components/ui/Carousel";
 import EventCard from "../components/ui/EventCard";
 import SelectFiltro from "../components/ui/FilterSelect";
 import { Search } from "lucide-react";
+import { useAuthValidation } from "../hooks/useAuthValidation";
 
 export default function SearchEvent() {
+
+  const authStatus = useAuthValidation();
+
+  useEffect(() => {
+		if (authStatus === "no-token" || authStatus === "invalid") {
+			localStorage.clear();
+		}
+	}, [authStatus]);
+
   const [search, setSearch] = useState("");
   const [filtro, setFiltro] = useState("");
 

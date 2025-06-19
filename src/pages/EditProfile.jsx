@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiFetch } from "../services/api";
+import { useAuthValidation } from "../hooks/useAuthValidation";
 import Input from "../components/ui/Input";
 import Label from "../components/ui/Label";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -10,70 +11,63 @@ import TopBar from "../components/ui/TopBar";
 
 export default function EditProfile() {
     const navigate = useNavigate();
+    const authStatus = useAuthValidation();
+    const [formData, setFormData] = useState(null);
+    const [passwordError, setPasswordError] = useState("");
 
     useEffect(() => {
-        document.title = "TicketPlus - Editar perfil";
-    }, []);
-
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-
-    const [formData, setFormData] = useState({
-        name: usuario.nombre,
-        lastNameFather: usuario.apellido_paterno,
-        lastNameMother: usuario.apellido_materno || "",
-        country: usuario.id_pais,
-        postalCode: usuario.codigo_postal,
-        email: usuario.correo,
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-    });
-
-    const [passwordError, setPasswordError] = useState("");
+        if (authStatus === "no-token" || authStatus === "invalid") {
+            localStorage.clear();
+            navigate("/iniciar-sesion");
+        } else if (authStatus === "valid") {
+            const usuario = JSON.parse(localStorage.getItem("usuario"));
+            setFormData({
+                name: usuario.nombre,
+                lastNameFather: usuario.apellido_paterno,
+                lastNameMother: usuario.apellido_materno || "",
+                country: usuario.id_pais,
+                postalCode: usuario.codigo_postal,
+                email: usuario.correo,
+                currentPassword: "",
+                newPassword: "",
+                confirmPassword: "",
+            });
+        }
+    }, [authStatus, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-
-        if (name === "newPassword" || name === "confirmPassword") {
+        setFormData((prev) => {
+            const updated = { ...prev, [name]: value };
             if (
-                formData.newPassword &&
-                formData.confirmPassword &&
-                formData.newPassword !== formData.confirmPassword
+                (name === "newPassword" || name === "confirmPassword") &&
+                updated.newPassword !== updated.confirmPassword
             ) {
                 setPasswordError("Las nuevas contraseñas no coinciden.");
             } else {
                 setPasswordError("");
             }
-        }
+            return updated;
+        });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const token = localStorage.getItem("token");
-        if (!token) {
-            alert("No hay sesión activa.");
-            return;
-        }
+        const usuario = JSON.parse(localStorage.getItem("usuario"));
+        if (!token || !usuario) return;
 
         const changingPassword =
             formData.currentPassword || formData.newPassword || formData.confirmPassword;
 
-        if (changingPassword) {
-            if (
-                !formData.currentPassword ||
-                !formData.newPassword ||
-                !formData.confirmPassword
-            ) {
-                setPasswordError("Debes completar todos los campos de contraseña.");
-                return;
-            }
+        if (changingPassword && (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword)) {
+            setPasswordError("Debes completar todos los campos de contraseña.");
+            return;
+        }
 
-            if (formData.newPassword !== formData.confirmPassword) {
-                setPasswordError("Las nuevas contraseñas no coinciden.");
-                return;
-            }
+        if (formData.newPassword !== formData.confirmPassword) {
+            setPasswordError("Las nuevas contraseñas no coinciden.");
+            return;
         }
 
         const payload = {
@@ -114,18 +108,17 @@ export default function EditProfile() {
             navigate("/mi-perfil");
         } catch (error) {
             console.error("Error al actualizar perfil:", error);
-            let msg = "No se pudo actualizar el perfil.";
-            try {
-                const parsed = JSON.parse(error.message.replace(/^Error \d+:\s*/, ""));
-                if (parsed.mensaje) msg = parsed.mensaje;
-            } catch { }
-            alert(msg);
+            alert("No se pudo actualizar el perfil.");
         }
     };
 
     const handleCancel = () => {
         navigate("/mi-perfil");
     };
+
+    if (!formData) {
+        return <p className="text-center py-20">Cargando datos del usuario...</p>;
+    }
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
