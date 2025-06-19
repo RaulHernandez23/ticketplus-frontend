@@ -1,5 +1,10 @@
 // src/App.jsx
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import EditProfile from "./pages/EditProfile";
@@ -7,6 +12,13 @@ import SearchEvent from "./pages/SearchEvent";
 import PasswordRecover from "./pages/PasswordRecover";
 import ValidateToken from "./pages/ValidateToken";
 import ChangePassword from "./pages/ChangePassword";
+import SelectTicketForRefund from "./pages/refundRequest/SelectTicketForRefund";
+import RefundForm from "./pages/refundRequest/RefundForm";
+import RefundSuccess from "./pages/refundRequest/RefundSuccess";
+import SelectTicketsForTransfer from "./pages/TicketTransfer/SelectTicketsForTransfer";
+import ReceiverData from "./pages/TicketTransfer/ReceiverData";
+import TransferSummary from "./pages/TicketTransfer/TransferSummary";
+import TransferSuccess from "./pages/TicketTransfer/TransferSuccess";
 import EventDetails from "./pages/EventDetails";
 
 function App() {
@@ -22,6 +34,22 @@ function App() {
         <Route path="/cambiar-contrasena" element={<ChangePassword />} />
         <Route path="/event-details/:id_evento" element={<EventDetails />} />
         <Route path="*" element={<div>404 - Página no encontrada</div>} />
+        <Route
+          path="/solicitar-reembolso"
+          element={<SelectTicketForRefund />}
+        />
+        <Route path="/solicitar-reembolso/:id" element={<RefundForm />} />
+        <Route path="/solicitar-reembolso/exito" element={<RefundSuccess />} />
+        <Route
+          path="/transferir-boleto"
+          element={<SelectTicketsForTransfer />}
+        />
+        <Route
+          path="/transferir-boleto/recibir-datos"
+          element={<ReceiverData />}
+        />
+        <Route path="/transferir-boleto/resumen" element={<TransferSummary />} />
+        <Route path="/transferir-boleto/exito" element={<TransferSuccess />} />
       </Routes>
     </Router>
   );
