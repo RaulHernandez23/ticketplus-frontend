@@ -20,6 +20,7 @@ import ReceiverData from "./pages/TicketTransfer/ReceiverData";
 import TransferSummary from "./pages/TicketTransfer/TransferSummary";
 import TransferSuccess from "./pages/TicketTransfer/TransferSuccess";
 import EventDetails from "./pages/EventDetails";
+import Events from "./pages/Events";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/validate-token" element={<ValidateToken />} />
         <Route path="/cambiar-contrasena" element={<ChangePassword />} />
         <Route path="/event-details/:id_evento" element={<EventDetails />} />
+        <Route path="/events" element={<Events />} />
         <Route path="*" element={<div>404 - Página no encontrada</div>} />
         <Route
           path="/solicitar-reembolso"

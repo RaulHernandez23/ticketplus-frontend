@@ -10,7 +10,7 @@ export default function TopBar() {
   const navigate = useNavigate();
 
   const buttons = [
-    { label: "Eventos", icon: <ImTicket size={20} color="#2D3FBD" /> },
+    { label: "Eventos", icon: <ImTicket size={20} color="#2D3FBD" />, route: "/events" },
     { label: "Artistas", icon: <GiMicrophone size={20} color="#2D3FBD" /> },
     { label: "Soporte", icon: <FaQuestion size={20} color="#2D3FBD" /> },
   ];
@@ -30,22 +30,22 @@ export default function TopBar() {
         <h1 className="text-lg font-bold">TicketPlus</h1>
         <nav className="flex items-center">
           <div className="flex items-center space-x-12 mr-20">
-            {buttons.map(({ label, icon }) => (
-              <div
-                key={label}
-                className="flex flex-col items-center hover:opacity-80 transition"
-              >
-                <span className="relative flex items-center justify-center w-9 h-9">
-                  <span className="absolute w-9 h-9 rounded-full bg-white"></span>
-                  <span className="relative z-10 flex items-center justify-center">
-                    {icon}
-                  </span>
-                </span>
-                <span className="text-sm mt-1 font-bold text-white">
-                  {label}
-                </span>
-              </div>
-            ))}
+            {buttons.map(({ label, icon, route }) => (
+  <button
+    key={label}
+    onClick={() => route && navigate(route)}
+    className="flex flex-col items-center hover:opacity-80 transition bg-transparent border-none focus:outline-none"
+    type="button"
+  >
+    <span className="relative flex items-center justify-center w-9 h-9">
+      <span className="absolute w-9 h-9 rounded-full bg-white"></span>
+      <span className="relative z-10 flex items-center justify-center">
+        {icon}
+      </span>
+    </span>
+    <span className="text-sm mt-1 font-bold text-white">{label}</span>
+  </button>
+))}
           </div>
           {/* Botón de perfil con lógica de login/sidebar */}
           <button
