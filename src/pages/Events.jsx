@@ -15,44 +15,50 @@ export default function Events() {
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
 
+  // Obtener eventos al montar el componente
   useEffect(() => {
-  const fetchEvents = async () => {
-    try {
-      const res = await fetch('http://localhost:3000/api/eventos');
-      const eventsData = await res.json();
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch('http://localhost:3000/api/eventos');
+        const eventsData = await res.json();
 
-      let favoriteIds = [];
-      const token = localStorage.getItem("token");
+        let favoriteIds = [];
+        const token = localStorage.getItem("token");
 
-      if (token) {
-        const id_usuario = JSON.parse(atob(token.split('.')[1])).uid;
-        const favRes = await fetch(`http://localhost:3000/api/eventos/favoritos/${id_usuario}`);
-        const favData = await favRes.json();
+        if (token) {
+          const id_usuario = JSON.parse(atob(token.split('.')[1])).uid;
+          const favRes = await fetch(`http://localhost:3000/api/eventos/favoritos/${id_usuario}`);
+          const favData = await favRes.json();
+          favoriteIds = favData.eventosFavoritos || [];
+        }
 
-        favoriteIds = favData.eventosFavoritos || [];
+        const formatted = eventsData.map(evt => ({
+          id: evt.id_evento,
+          title: evt.titulo,
+          artist: evt.artista || '',
+          category: evt.categoria || '',
+          image: evt.banner_base64 || 'https://via.placeholder.com/250x250?text=Sin+imagen',
+          isFavorite: favoriteIds.includes(evt.id_evento)
+        }));
+
+        setAllEvents(formatted);
+      } catch (err) {
+        console.error('Error al obtener eventos:', err);
       }
+    };
 
-      const formatted = eventsData.map(evt => ({
-        id: evt.id_evento,
-        title: evt.titulo,
-        artist: evt.artista || '',
-        category: evt.categoria || '',
-        image: evt.banner_base64 || 'https://via.placeholder.com/250x250?text=Sin+imagen',
-        isFavorite: favoriteIds.includes(evt.id_evento) // ✅ Ahora sí es seguro
-      }));
+    fetchEvents();
+  }, []);
 
-      setAllEvents(formatted);
-    } catch (err) {
-      console.error('Error al obtener eventos:', err);
+  // Filtrar eventos en tiempo real
+  useEffect(() => {
+    const query = search.trim().toLowerCase();
+
+    if (query === "") {
+      setFilteredEvents([]);
+      return;
     }
-  };
 
-  fetchEvents();
-}, []);
-
-
-  const handleSearchClick = () => {
-    const query = search.toLowerCase();
     let result = [];
 
     if (filtro === 'Título') {
@@ -61,12 +67,10 @@ export default function Events() {
       result = allEvents.filter(e => e.artist.toLowerCase().includes(query));
     } else if (filtro === 'Categoría') {
       result = allEvents.filter(e => e.category.toLowerCase().includes(query));
-    } else {
-      result = allEvents;
     }
 
     setFilteredEvents(result);
-  };
+  }, [search, filtro, allEvents]);
 
   const eventsToRender = filteredEvents.length > 0 ? filteredEvents : allEvents;
 
@@ -88,13 +92,11 @@ export default function Events() {
               onChange={(e) => setSearch(e.target.value)}
               className="w-80"
             />
-            <Button onClick={handleSearchClick}>
-              <Search size={20} />
-            </Button>
             <FiltersSelect value={filtro} onChange={setFiltro} />
           </div>
         </div>
 
+        {/* Grid de eventos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 place-items-center mt-6">
           {eventsToRender.map((event, idx) => (
             <ListCardEvent
@@ -107,6 +109,7 @@ export default function Events() {
           ))}
         </div>
 
+        {/* Botón de regreso */}
         <div className="flex justify-center mt-10">
           <button
             onClick={() => navigate('/search-event')}
