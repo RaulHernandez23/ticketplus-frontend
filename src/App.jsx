@@ -30,6 +30,9 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Redirección de "/" hacia "/search-events" */}
+        <Route path="/" element={<Navigate to="/search-event" replace />} />
+
         <Route path="/registro" element={<Register />} />
         <Route path="/iniciar-sesion" element={<Login />} />
         <Route path="/editar-perfil" element={<EditProfile />} />
