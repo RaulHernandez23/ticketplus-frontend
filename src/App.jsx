@@ -46,7 +46,10 @@ function App() {
           path="/transferir-boleto/recibir-datos"
           element={<ReceiverData />}
         />
-        <Route path="/transferir-boleto/resumen" element={<TransferSummary />} />
+        <Route
+          path="/transferir-boleto/resumen"
+          element={<TransferSummary />}
+        />
         <Route path="/transferir-boleto/exito" element={<TransferSuccess />} />
       </Routes>
     </Router>
