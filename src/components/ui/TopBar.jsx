@@ -7,7 +7,6 @@ import Sidebar from "./Sidebar";
 
 export default function TopBar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const navigate = useNavigate();
 
   const buttons = [
@@ -30,7 +29,6 @@ export default function TopBar() {
       <header className="flex justify-between items-center px-6 py-4 bg-[#2D3FBD] text-white">
         <h1 className="text-lg font-bold">TicketPlus</h1>
         <nav className="flex items-center">
-          {/* Íconos principales con separación y alejados del perfil */}
           <div className="flex items-center space-x-12 mr-20">
             {buttons.map(({ label, icon }) => (
               <div
@@ -38,9 +36,7 @@ export default function TopBar() {
                 className="flex flex-col items-center hover:opacity-80 transition"
               >
                 <span className="relative flex items-center justify-center w-9 h-9">
-                  {/* Círculo blanco sólido */}
                   <span className="absolute w-9 h-9 rounded-full bg-white"></span>
-                  {/* Ícono centrado */}
                   <span className="relative z-10 flex items-center justify-center">
                     {icon}
                   </span>
@@ -51,10 +47,10 @@ export default function TopBar() {
               </div>
             ))}
           </div>
-          {/* Botón de perfil */}
+          {/* Botón de perfil con lógica de login/sidebar */}
           <button
             className="relative flex items-center justify-center w-12 h-12 bg-transparent"
-            onClick={() => setSidebarOpen(true)}
+            onClick={handleUserClick}
             type="button"
             aria-label="Abrir menú de usuario"
           >
