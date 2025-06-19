@@ -25,11 +25,15 @@ import HelpQuestion from "./pages/help/HelpQuestion";
 import HelpSearchResults from "./pages/help/HelpSearchResults";
 import EventDetails from "./pages/EventDetails";
 import Events from "./pages/Events";
+import ViewProfile from "./pages/ViewProfile";
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Redirección de "/" hacia "/search-events" */}
+        <Route path="/" element={<Navigate to="/search-event" replace />} />
+
         <Route path="/registro" element={<Register />} />
         <Route path="/iniciar-sesion" element={<Login />} />
         <Route path="/editar-perfil" element={<EditProfile />} />
@@ -39,6 +43,7 @@ function App() {
         <Route path="/cambiar-contrasena" element={<ChangePassword />} />
         <Route path="/event-details/:id_evento" element={<EventDetails />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/mi-perfil" element={<ViewProfile />} />
         <Route path="*" element={<div>404 - Página no encontrada</div>} />
         <Route
           path="/solicitar-reembolso"

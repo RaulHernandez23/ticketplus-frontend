@@ -86,6 +86,9 @@ export default function ValidateToken() {
                     <h1 className="text-2xl font-bold text-blue-700 mb-6">
                         Verificar código
                     </h1>
+                    <p className="text-sm text-gray-900 mb-6">
+                        Por favor, ingresa el código que te enviamos a tu correo.
+                    </p>
 
                     <form onSubmit={handleSubmit} className="space-y-5 text-left">
                         <div>
