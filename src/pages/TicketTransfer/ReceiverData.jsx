@@ -122,14 +122,14 @@ export default function ReceiverData() {
                 por errores en los datos del receptor o por transferencias a
                 usuarios incorrectos. Para más detalles sobre el proceso y las
                 políticas de transferencia, consulta nuestra sección de{" "}
-                <a
-                  href="/ayuda"
-                  className="underline text-[#2D3FBD]"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <span
+                  className="underline text-[#2D3FBD] cursor-pointer"
+                  onClick={() =>
+                    window.open("http://localhost:5173/ayuda/cuenta", "_blank")
+                  }
                 >
                   ayuda
-                </a>
+                </span>
                 .
               </p>
             </div>

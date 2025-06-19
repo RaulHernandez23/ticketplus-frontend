@@ -77,7 +77,15 @@ export default function SelectTicketsForTransfer() {
           <p className="mb-8 text-base text-black font-normal">
             Envía boletos a tus amigos de manera fácil y segura, más información
             en{" "}
-            <span className="underline text-[#2D3FBD] cursor-pointer">
+            <span
+              className="underline text-[#2D3FBD] cursor-pointer"
+              onClick={() =>
+                window.open(
+                  "http://localhost:5173/ayuda/boletos/transferir-boletos",
+                  "_blank"
+                )
+              }
+            >
               Transferencia de boletos
             </span>
             .

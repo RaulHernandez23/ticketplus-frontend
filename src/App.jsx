@@ -19,6 +19,10 @@ import SelectTicketsForTransfer from "./pages/TicketTransfer/SelectTicketsForTra
 import ReceiverData from "./pages/TicketTransfer/ReceiverData";
 import TransferSummary from "./pages/TicketTransfer/TransferSummary";
 import TransferSuccess from "./pages/TicketTransfer/TransferSuccess";
+import HelpCenter from "./pages/help/HelpCenter";
+import HelpCategory from "./pages/help/HelpCategory";
+import HelpQuestion from "./pages/help/HelpQuestion";
+import HelpSearchResults from "./pages/help/HelpSearchResults";
 import EventDetails from "./pages/EventDetails";
 import Events from "./pages/Events";
 
@@ -50,8 +54,18 @@ function App() {
           path="/transferir-boleto/recibir-datos"
           element={<ReceiverData />}
         />
-        <Route path="/transferir-boleto/resumen" element={<TransferSummary />} />
+        <Route
+          path="/transferir-boleto/resumen"
+          element={<TransferSummary />}
+        />
         <Route path="/transferir-boleto/exito" element={<TransferSuccess />} />
+        <Route path="/ayuda" element={<HelpCenter />} />
+        <Route path="/ayuda/buscar" element={<HelpSearchResults />} />
+        <Route path="/ayuda/:categoryKey" element={<HelpCategory />} />
+        <Route
+          path="/ayuda/:categoryKey/:questionId"
+          element={<HelpQuestion />}
+        />
       </Routes>
     </Router>
   );
