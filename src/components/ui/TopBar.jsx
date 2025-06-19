@@ -53,7 +53,7 @@ export default function TopBar() {
                   label === "Soporte"
                     ? handleSupportClick
                     : label === "Eventos"
-                    ? () => navigate("/buscar-evento")
+                    ? () => navigate("/events")
                     : undefined
                 }
                 title={label}

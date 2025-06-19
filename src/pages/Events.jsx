@@ -16,27 +16,40 @@ export default function Events() {
   const [allEvents, setAllEvents] = useState([]);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const res = await fetch('http://localhost:3000/api/eventos');
-        const data = await res.json();
-        console.log('Eventos desde API:', data);
+  const fetchEvents = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/api/eventos');
+      const eventsData = await res.json();
 
-        const formatted = data.map(evt => ({
-          title: evt.titulo,
-          artist: evt.artista || '',
-          category: evt.categoria || '',
-          image: evt.banner_base64 || 'https://via.placeholder.com/250x250?text=Sin+imagen'
-        }));
+      let favoriteIds = [];
+      const token = localStorage.getItem("token");
 
-        setAllEvents(formatted);
-      } catch (err) {
-        console.error('Error al obtener eventos:', err);
+      if (token) {
+        const id_usuario = JSON.parse(atob(token.split('.')[1])).uid;
+        const favRes = await fetch(`http://localhost:3000/api/eventos/favoritos/${id_usuario}`);
+        const favData = await favRes.json();
+
+        favoriteIds = favData.eventosFavoritos || [];
       }
-    };
 
-    fetchEvents();
-  }, []);
+      const formatted = eventsData.map(evt => ({
+        id: evt.id_evento,
+        title: evt.titulo,
+        artist: evt.artista || '',
+        category: evt.categoria || '',
+        image: evt.banner_base64 || 'https://via.placeholder.com/250x250?text=Sin+imagen',
+        isFavorite: favoriteIds.includes(evt.id_evento) // ✅ Ahora sí es seguro
+      }));
+
+      setAllEvents(formatted);
+    } catch (err) {
+      console.error('Error al obtener eventos:', err);
+    }
+  };
+
+  fetchEvents();
+}, []);
+
 
   const handleSearchClick = () => {
     const query = search.toLowerCase();
@@ -86,8 +99,10 @@ export default function Events() {
           {eventsToRender.map((event, idx) => (
             <ListCardEvent
               key={idx}
-              title={event.title}
+              id_evento={event.id}
               image={event.image}
+              title={event.title}
+              isFavorite={event.isFavorite}
             />
           ))}
         </div>
