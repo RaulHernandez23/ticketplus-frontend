@@ -15,7 +15,6 @@ export default function TopBar() {
     { label: "Soporte", icon: <FaQuestion size={20} color="#2D3FBD" /> },
   ];
 
-  // SOLO lógica: si hay token abre sidebar, si no navega a login
   const handleUserClick = () => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -48,7 +47,7 @@ export default function TopBar() {
               </div>
             ))}
           </div>
-          {/* Botón de perfil con lógica de login/sidebar */}
+          {/* Botón de perfil */}
           <button
             className="relative flex items-center justify-center w-12 h-12 bg-transparent"
             onClick={handleUserClick}
