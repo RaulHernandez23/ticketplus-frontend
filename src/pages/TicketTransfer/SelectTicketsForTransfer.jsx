@@ -61,7 +61,10 @@ export default function SelectTicketsForTransfer() {
       <TopBar />
       <div className="max-w-6xl mx-auto mt-10 px-4">
         {/* Breadcrumb */}
-        <span className="text-xs text-[#2D3FBD] underline mb-2 inline-block font-bold">
+        <span
+          className="text-xs text-[#2D3FBD] underline mb-2 inline-block font-bold cursor-pointer"
+          onClick={() => window.location.reload()}
+        >
           Transferencia de boletos
         </span>
         {/* Título principal */}
