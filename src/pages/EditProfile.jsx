@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiFetch } from "../services/api";
 import Input from "../components/ui/Input";
 import Label from "../components/ui/Label";
@@ -6,7 +7,10 @@ import PrimaryButton from "../components/ui/PrimaryButton";
 import SecondaryButton from "../components/ui/SecondaryButton";
 import CountrySelect from "../components/ui/CountrySelect";
 import TopBar from "../components/ui/TopBar";
+
 export default function EditProfile() {
+    const navigate = useNavigate();
+
     useEffect(() => {
         document.title = "TicketPlus - Editar perfil";
     }, []);
@@ -89,7 +93,7 @@ export default function EditProfile() {
         }
 
         try {
-            const response = await apiFetch("/api/usuarios/actualizar-perfil", {
+            await apiFetch("/api/usuarios/actualizar-perfil", {
                 method: "PUT",
                 body: JSON.stringify(payload),
                 headers: {
@@ -98,8 +102,6 @@ export default function EditProfile() {
                 },
             });
 
-            alert("Perfil actualizado correctamente.");
-            
             const usuarioActualizado = await apiFetch(`/api/usuarios/recuperar-perfil/${usuario.id_usuario}`, {
                 method: "GET",
                 headers: {
@@ -108,10 +110,8 @@ export default function EditProfile() {
             });
 
             localStorage.setItem("usuario", JSON.stringify(usuarioActualizado));
-
-            window.location.reload();
-            console.log("Respuesta:", response);
-            setPasswordError("");
+            alert("Perfil actualizado correctamente.");
+            navigate("/mi-perfil");
         } catch (error) {
             console.error("Error al actualizar perfil:", error);
             let msg = "No se pudo actualizar el perfil.";
@@ -121,6 +121,10 @@ export default function EditProfile() {
             } catch { }
             alert(msg);
         }
+    };
+
+    const handleCancel = () => {
+        navigate("/mi-perfil");
     };
 
     return (
@@ -259,7 +263,9 @@ export default function EditProfile() {
                         {/* Botones */}
                         <div className="flex gap-4 mt-6">
                             <PrimaryButton type="submit">Guardar cambios</PrimaryButton>
-                            <SecondaryButton type="button">Cancelar</SecondaryButton>
+                            <SecondaryButton type="button" onClick={handleCancel}>
+                                Cancelar
+                            </SecondaryButton>
                         </div>
                     </form>
                 </div>

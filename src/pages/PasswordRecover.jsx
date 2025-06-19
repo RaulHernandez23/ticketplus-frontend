@@ -81,6 +81,9 @@ export default function PasswordRecover() {
                     <h1 className="text-2xl font-bold text-blue-700 mb-6">
                         Recuperar contraseña
                     </h1>
+                    <p className="text-sm text-gray-900 mb-6">
+                        Se enviará un código de recuperación a tu correo electrónico registrado.
+                    </p>
 
                     <form onSubmit={handleSubmit} className="space-y-5 text-left">
                         <div>

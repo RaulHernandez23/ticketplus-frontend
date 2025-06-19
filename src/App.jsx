@@ -7,6 +7,7 @@ import SearchEvent from "./pages/SearchEvent";
 import PasswordRecover from "./pages/PasswordRecover";
 import ValidateToken from "./pages/ValidateToken";
 import ChangePassword from "./pages/ChangePassword";
+import ViewProfile from "./pages/ViewProfile";
 
 function App() {
   return (
@@ -19,7 +20,11 @@ function App() {
         <Route path="/recuperar-contrasena" element={<PasswordRecover />} />
         <Route path="/validate-token" element={<ValidateToken />} />
         <Route path="/cambiar-contrasena" element={<ChangePassword />} />
+        <Route path="/mi-perfil" element={<ViewProfile />} />
+
+        {/* Redirección por defecto */}
         <Route path="*" element={<div>404 - Página no encontrada</div>} />
+
       </Routes>
     </Router>
   );
