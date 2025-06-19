@@ -127,7 +127,7 @@ export default function RefundForm() {
       {/* Línea */}
       <div className="w-full border-b-2 border-black mb-10 mt-4" />
 
-      {/* Contenedor principal igual*/}
+      {/* Contenedor principal*/}
       <div className="max-w-6xl mx-auto px-4">
         <div
           className="border-2 border-black bg-white p-8"
@@ -336,7 +336,7 @@ export default function RefundForm() {
           </form>
         </div>
       </div>
-      {/* Bloque en blanco al final de la página */}
+      {/* Bloque en blanco al final */}
       <div className="w-full h-32 bg-white" />
     </div>
   );

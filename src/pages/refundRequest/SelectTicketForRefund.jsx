@@ -52,7 +52,7 @@ export default function SelectTicketForRefund() {
           Solicitar reembolso
         </h1>
       </div>
-      {/* Línea divisoria negra que cruza toda la pantalla */}
+      {/* Línea divisoria*/}
       <div className="w-full border-b-2 border-black mb-10 mt-4" />
 
       {/* Caja de boletos */}

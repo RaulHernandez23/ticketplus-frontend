@@ -15,6 +15,10 @@ import ChangePassword from "./pages/ChangePassword";
 import SelectTicketForRefund from "./pages/refundRequest/SelectTicketForRefund";
 import RefundForm from "./pages/refundRequest/RefundForm";
 import RefundSuccess from "./pages/refundRequest/RefundSuccess";
+import SelectTicketsForTransfer from "./pages/TicketTransfer/SelectTicketsForTransfer";
+import ReceiverData from "./pages/TicketTransfer/ReceiverData";
+import TransferSummary from "./pages/TicketTransfer/TransferSummary";
+import TransferSuccess from "./pages/TicketTransfer/TransferSuccess";
 
 function App() {
   return (
@@ -34,6 +38,16 @@ function App() {
         />
         <Route path="/solicitar-reembolso/:id" element={<RefundForm />} />
         <Route path="/solicitar-reembolso/exito" element={<RefundSuccess />} />
+        <Route
+          path="/transferir-boleto"
+          element={<SelectTicketsForTransfer />}
+        />
+        <Route
+          path="/transferir-boleto/recibir-datos"
+          element={<ReceiverData />}
+        />
+        <Route path="/transferir-boleto/resumen" element={<TransferSummary />} />
+        <Route path="/transferir-boleto/exito" element={<TransferSuccess />} />
       </Routes>
     </Router>
   );
