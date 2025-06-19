@@ -47,7 +47,7 @@ export default function TopBar() {
               </div>
             ))}
           </div>
-          {/* Botón de perfil */}
+          {/* Botón de perfil con lógica de login/sidebar */}
           <button
             className="relative flex items-center justify-center w-12 h-12 bg-transparent"
             onClick={handleUserClick}

@@ -23,6 +23,7 @@ import HelpCenter from "./pages/help/HelpCenter";
 import HelpCategory from "./pages/help/HelpCategory";
 import HelpQuestion from "./pages/help/HelpQuestion";
 import HelpSearchResults from "./pages/help/HelpSearchResults";
+import EventDetails from "./pages/EventDetails";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/recuperar-contrasena" element={<PasswordRecover />} />
         <Route path="/validate-token" element={<ValidateToken />} />
         <Route path="/cambiar-contrasena" element={<ChangePassword />} />
+        <Route path="/event-details/:id_evento" element={<EventDetails />} />
         <Route path="*" element={<div>404 - Página no encontrada</div>} />
         <Route
           path="/solicitar-reembolso"

@@ -46,7 +46,7 @@ export default function Carousel({ search = "", filtro = "" }) {
           className="w-full h-full object-cover"
         />
         <Link
-          to={`/evento/${current.id_evento}`}
+          to={`/event-details/${current.id_evento}`}
           className="absolute bottom-4 right-6 bg-black bg-opacity-40 text-white px-4 py-2 rounded hover:underline text-sm"
         >
           Ir al evento
