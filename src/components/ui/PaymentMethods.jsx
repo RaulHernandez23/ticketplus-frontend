@@ -26,7 +26,15 @@ export default function PaymentMethods({ selected, onSelect }) {
       <h2 className="font-bold text-lg text-blue-900 mb-4">Método de Pago</h2>
       <div className="flex flex-col gap-4">
         {metodos.length === 0 && (
-          <div className="text-gray-500 text-center">No tienes métodos de pago registrados.</div>
+          <div className="text-gray-500 text-center">
+            No tienes métodos de pago registrados.<br />
+            <a
+              href="/payment-methods"
+              className="text-blue-700 font-semibold text-xs hover:text-blue-900 no-underline pt-2"
+            >
+              Registrar método de pago
+            </a>
+          </div>
         )}
         {metodos.map((m) => (
           <button
