@@ -19,15 +19,19 @@ export default function EventReview() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const eventoRes = await fetch(`http://localhost:3000/api/eventos/${id_evento}`);
+        const eventoRes = await fetch(
+          `http://localhost:3000/api/eventos/${id_evento}`
+        );
         const eventoData = await eventoRes.json();
         setEvento(eventoData);
 
         const token = localStorage.getItem("token");
         if (token) {
-          const id_usuario = JSON.parse(atob(token.split('.')[1])).uid;
+          const id_usuario = JSON.parse(atob(token.split(".")[1])).uid;
 
-          const valRes = await fetch(`http://localhost:3000/api/eventos/valoracion/${id_evento}/${id_usuario}`);
+          const valRes = await fetch(
+            `http://localhost:3000/api/eventos/valoracion/${id_evento}/${id_usuario}`
+          );
           const valData = await valRes.json();
           setYaValorado(valData.valorado);
         }
@@ -57,7 +61,7 @@ export default function EventReview() {
       return;
     }
 
-    const id_usuario = JSON.parse(atob(token.split('.')[1])).uid;
+    const id_usuario = JSON.parse(atob(token.split(".")[1])).uid;
 
     fetch("http://localhost:3000/api/eventos/valoracion", {
       method: "POST",
@@ -110,7 +114,9 @@ export default function EventReview() {
             <div className="mt-4 text-base text-gray-800 space-y-1">
               <div className="flex items-center justify-center gap-2">
                 <span>📍</span>
-                <span>{recinto?.nombre}, {recinto?.ciudad}</span>
+                <span>
+                  {recinto?.nombre}, {recinto?.ciudad}
+                </span>
               </div>
               <div className="flex items-center justify-center gap-2">
                 <span>📅</span>
@@ -136,7 +142,9 @@ export default function EventReview() {
               </div>
             ) : (
               <>
-                <h4 className="text-2xl font-bold text-blue-800 mb-4">Calificación</h4>
+                <h4 className="text-2xl font-bold text-blue-800 mb-4">
+                  Calificación
+                </h4>
 
                 <StarRating
                   rating={rating}

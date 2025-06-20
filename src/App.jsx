@@ -49,7 +49,7 @@ function App() {
         <Route path="/cambiar-contrasena" element={<ChangePassword />} />
         <Route path="/event-details/:id_evento" element={<EventDetails />} />
         <Route path="/events" element={<Events />} />
-        <Route path="/event-review" element={<EventReview />} />
+        <Route path="/event-review/:id_evento" element={<EventReview />} />
         <Route path="/manage-notifications" element={<ManageNotifications />} />
         <Route path="/mi-perfil" element={<ViewProfile />} />
         <Route path="*" element={<div>404 - Página no encontrada</div>} />

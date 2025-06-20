@@ -34,6 +34,7 @@ export default function PurchaseHistory() {
             precio: boleto.precio || 0,
           },
           id_funcion: boleto.id_funcion || null,
+          id_evento: boleto.id_evento || null,
           id_boleto: boleto.id_boleto,
         }));
         setCompras(adaptados);
@@ -197,6 +198,17 @@ export default function PurchaseHistory() {
                   <button
                     className="w-11/12 py-2 bg-[#1d1f70] text-white font-bold rounded-xl text-lg shadow hover:bg-[#3a3ee6] transition"
                     style={{ maxWidth: 320 }}
+                    onClick={() => {
+                      if (compraSeleccionada?.id_evento) {
+                        navigate(
+                          `/event-review/${compraSeleccionada.id_evento}`
+                        );
+                      } else {
+                        alert(
+                          "No se pudo identificar el evento para calificar."
+                        );
+                      }
+                    }}
                   >
                     Calificar
                   </button>
