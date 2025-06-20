@@ -9,7 +9,7 @@ export default function PaymentMethods({ selected, onSelect }) {
 
   useEffect(() => {
     if (!usuario?.id_usuario) return;
-    apiFetch(`/api/boletos/metodos-pago/1`, {
+    apiFetch(`/api/boletos/metodos-pago/${usuario.id_usuario}`, {
       method: "GET",
       headers: {
         "Accept": "application/json",
