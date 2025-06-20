@@ -25,6 +25,7 @@ import HelpQuestion from "./pages/help/HelpQuestion";
 import HelpSearchResults from "./pages/help/HelpSearchResults";
 import EventDetails from "./pages/EventDetails";
 import ViewProfile from "./pages/ViewProfile";
+import PurchaseHistory from "./pages/PurchaseHistory";
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
           path="/ayuda/:categoryKey/:questionId"
           element={<HelpQuestion />}
         />
+        <Route path="/historial" element={<PurchaseHistory />} />
       </Routes>
     </Router>
   );
