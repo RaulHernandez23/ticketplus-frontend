@@ -42,16 +42,16 @@ export default function PurchaseHistory() {
               <table className="w-full border-2 border-[#1d1f70] rounded-t-2xl rounded-b-2xl bg-white shadow-lg">
                 <thead>
                   <tr>
-                    <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70] border-r-2 border-[#1d1f70] rounded-tl-2xl">
+                    <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70] rounded-tl-2xl">
                       Función
                     </th>
-                    <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70] border-r-2 border-[#1d1f70]">
+                    <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70]">
                       Sede
                     </th>
-                    <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70] border-r-2 border-[#1d1f70]">
+                    <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70]">
                       Sección
                     </th>
-                    <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70] border-r-2 border-[#1d1f70]">
+                    <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70]">
                       Fila
                     </th>
                     <th className="py-3 px-4 bg-[#1d1f70] text-white font-bold text-center border-b-2 border-[#1d1f70] rounded-tr-2xl">
