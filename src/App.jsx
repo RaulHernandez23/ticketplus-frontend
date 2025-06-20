@@ -76,6 +76,9 @@ function App() {
           path="/ayuda/:categoryKey/:questionId"
           element={<HelpQuestion />}
         />
+        
+        <Route path="/choose-seat/:id_funcion" element={<ChooseSeat />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </Router>
   );
