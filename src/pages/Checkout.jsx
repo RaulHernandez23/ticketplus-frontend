@@ -27,6 +27,10 @@ export default function Checkout() {
     setLoading(true);
     try {
       await apiFetch("/api/boletos/registrar-venta", {
+        headers: {
+          "Content-Type": "application/json",
+          "x-token": `${localStorage.getItem("token")}`,
+        },
         method: "POST",
         body: JSON.stringify({
           id_funcion,
