@@ -26,6 +26,7 @@ import HelpSearchResults from "./pages/help/HelpSearchResults";
 import EventDetails from "./pages/EventDetails";
 import Events from "./pages/Events";
 import ViewProfile from "./pages/ViewProfile";
+import EventReview from "./pages/EventReview";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="/cambiar-contrasena" element={<ChangePassword />} />
         <Route path="/event-details/:id_evento" element={<EventDetails />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/event-review" element={<EventReview />} />
         <Route path="/mi-perfil" element={<ViewProfile />} />
         <Route path="*" element={<div>404 - Página no encontrada</div>} />
         <Route
