@@ -62,7 +62,7 @@ export default function Sidebar({ isOpen, onClose }) {
                   className="w-full text-left bg-transparent border-none px-0 py-0.5 text-sm font-normal text-blue-700 hover:underline rounded"
                   style={{ fontFamily: "inherit" }}
                   onClick={() => {
-                    navigate("/historial");
+                    navigate("/historial-compras");
                     onClose();
                   }}
                 >

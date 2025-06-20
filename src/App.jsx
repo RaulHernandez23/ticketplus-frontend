@@ -77,11 +77,18 @@ function App() {
           path="/ayuda/:categoryKey/:questionId"
           element={<HelpQuestion />}
         />
-        
+
         <Route path="/choose-seat/:id_funcion" element={<ChooseSeat />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/purchase-history" element={<PurchaseHistory />} />
         <Route path="/payment-methods" element={<RegisterPaymentMethod />} />
+        <Route path="/historial-compras" element={<PurchaseHistory />} />
+        <Route path="/choose-seat/:id_funcion" element={<ChooseSeat />} />
+        <Route path="/checkout/" element={<Checkout />} />
+        <Route
+          path="/boleto/:id_boleto/descargar-pdf"
+          element={<div>Descargando PDF...</div>}
+        />
       </Routes>
     </Router>
   );
