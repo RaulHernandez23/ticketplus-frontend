@@ -26,7 +26,11 @@ import HelpSearchResults from "./pages/help/HelpSearchResults";
 import EventDetails from "./pages/EventDetails";
 import Events from "./pages/Events";
 import ViewProfile from "./pages/ViewProfile";
+import PurchaseHistory from "./pages/PurchaseHistory";
 import EventReview from "./pages/EventReview";
+import ChooseSeat from "./pages/ChooseSeat";
+import Checkout from "./pages/Checkout";
+import RegisterPaymentMethod from "./pages/RegisterPaymentMethod";
 import ManageNotifications from "./pages/ManageNotifications";
 
 function App() {
@@ -75,6 +79,11 @@ function App() {
           path="/ayuda/:categoryKey/:questionId"
           element={<HelpQuestion />}
         />
+        
+        <Route path="/choose-seat/:id_funcion" element={<ChooseSeat />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/purchase-history" element={<PurchaseHistory />} />
+        <Route path="/payment-methods" element={<RegisterPaymentMethod />} />
       </Routes>
     </Router>
   );

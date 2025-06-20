@@ -90,6 +90,7 @@ export default function EventDetails() {
 
             <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8">
               <button
+                onClick={() => navigate(`/choose-seat/${id_evento}`)}
                 className="w-full sm:w-auto py-2 px-6 bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg shadow-md transition"
               >
                 Comprar Boletos

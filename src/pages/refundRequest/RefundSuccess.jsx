@@ -16,12 +16,10 @@ export default function RefundSuccess() {
       <div className="flex flex-1 flex-col items-center justify-center">
         <RiCheckboxCircleLine size={120} color="#2D3FBD" className="mb-6" />
         <h2 className="text-4xl font-bold text-[#2D3FBD] mb-4 text-center">
-          Solicitud enviada con éxito
+          ¡Reembolso realizado correctamente!
         </h2>
         <p className="text-xl text-gray-700 text-center mb-8">
-          Recibirás tu reembolso en un plazo
-          <br />
-          máximo de 24 hrs
+          El monto será reflejado en tu cuenta en un plazo máximo de 24 hrs.
         </p>
         <PrimaryButton className="w-56 text-lg" onClick={handleGoHome}>
           Ir al menú principal
