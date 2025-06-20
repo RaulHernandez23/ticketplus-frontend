@@ -30,6 +30,7 @@ import PurchaseHistory from "./pages/PurchaseHistory";
 import EventReview from "./pages/EventReview";
 import ChooseSeat from "./pages/ChooseSeat";
 import Checkout from "./pages/Checkout";
+import RegisterPaymentMethod from "./pages/RegisterPaymentMethod";
 
 function App() {
   return (
@@ -76,6 +77,11 @@ function App() {
           path="/ayuda/:categoryKey/:questionId"
           element={<HelpQuestion />}
         />
+
+        <Route path="/choose-seat/:id_funcion" element={<ChooseSeat />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/purchase-history" element={<PurchaseHistory />} />
+        <Route path="/payment-methods" element={<RegisterPaymentMethod />} />
         <Route path="/historial-compras" element={<PurchaseHistory />} />
         <Route path="/choose-seat/:id_funcion" element={<ChooseSeat />} />
         <Route path="/checkout/" element={<Checkout />} />
