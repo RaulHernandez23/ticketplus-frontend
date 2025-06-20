@@ -54,46 +54,15 @@ export default function PurchaseHistory() {
 
   // Ajustar el índice seleccionado si el filtro cambia
   useEffect(() => {
-    setSelected(0);
-  }, [soloAsistidos, compras.length]);
-
-  const handleDescargar = async () => {
-    const id_boleto = comprasFiltradas[selected]?.id_boleto;
-    if (!id_boleto) return;
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch(`/api/boletos/${id_boleto}/descargar-pdf`, {
-        headers: { "x-token": token },
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        alert("Error al descargar el boleto: " + errorText);
-        return;
-      }
-      if (!response.headers.get("content-type")?.includes("application/pdf")) {
-        const errorText = await response.text();
-        alert("Error al descargar el boleto: " + errorText);
-        return;
-      }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `boleto_${id_boleto}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      alert("Error al descargar el boleto.");
+    if (comprasFiltradas.length === 0) {
+      setSelected(-1);
+    } else if (selected >= comprasFiltradas.length || selected < 0) {
+      setSelected(0);
     }
-  };
+    // eslint-disable-next-line
+  }, [soloAsistidos, compras.length, comprasFiltradas.length]);
 
-  // Verificar si el evento ya pasó para deshabilitar el botón de descarga
-  const eventoYaPaso =
-    comprasFiltradas[selected] &&
-    comprasFiltradas[selected].fecha &&
-    new Date(comprasFiltradas[selected].fecha) < now;
+  const compraSeleccionada = selected >= 0 ? comprasFiltradas[selected] : null;
 
   return (
     <div className="min-h-screen w-full bg-[#f6f8fc]">
@@ -213,18 +182,17 @@ export default function PurchaseHistory() {
           </div>
           {/* Panel lateral de resumen usando TicketSummary con los datos completos */}
           <div className="w-full lg:w-[350px] min-w-[300px] flex flex-col items-center">
-            {comprasFiltradas[selected] &&
-            comprasFiltradas[selected].asiento &&
-            comprasFiltradas[selected].zona &&
-            comprasFiltradas[selected].id_funcion ? (
+            {compraSeleccionada &&
+            compraSeleccionada.asiento &&
+            compraSeleccionada.zona &&
+            compraSeleccionada.id_funcion ? (
               <>
                 <TicketSummary
-                  asiento={comprasFiltradas[selected].asiento}
-                  zona={comprasFiltradas[selected].zona}
-                  id_funcion={comprasFiltradas[selected].id_funcion}
+                  asiento={compraSeleccionada.asiento}
+                  zona={compraSeleccionada.zona}
+                  id_funcion={compraSeleccionada.id_funcion}
                 />
                 <div style={{ height: "18px" }} />
-                {/* Botón Calificar solo si el filtro de asistidos está activo */}
                 {soloAsistidos && (
                   <button
                     className="w-11/12 py-2 bg-[#1d1f70] text-white font-bold rounded-xl text-lg shadow hover:bg-[#3a3ee6] transition"
