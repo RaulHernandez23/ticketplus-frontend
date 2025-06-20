@@ -1,55 +1,26 @@
-import { useState } from "react";
 import { useEffect } from "react";
 import TopBar from "../components/ui/TopBar";
-import Input from "../components/ui/Input";
-import Button from "../components/ui/Button";
 import Carousel from "../components/ui/Carousel";
 import EventCard from "../components/ui/EventCard";
-import SelectFiltro from "../components/ui/FilterSelect";
-import { Search } from "lucide-react";
 import { useAuthValidation } from "../hooks/useAuthValidation";
 
 export default function SearchEvent() {
-
   const authStatus = useAuthValidation();
 
   useEffect(() => {
-		if (authStatus === "no-token" || authStatus === "invalid") {
-			localStorage.clear();
-		}
-	}, [authStatus]);
-
-  const [search, setSearch] = useState("");
-  const [filtro, setFiltro] = useState("");
-
-  const handleSearchClick = () => {
-    console.log("Buscar:", search, filtro);
-  };
+    if (authStatus === "no-token" || authStatus === "invalid") {
+      localStorage.clear();
+    }
+  }, [authStatus]);
 
   return (
     <div className="min-h-screen w-full bg-gray-900 text-white p-4">
       <div className="max-w-screen-2xl mx-auto bg-white min-h-screen rounded-md overflow-hidden text-black">
         <TopBar />
 
-        {/* Buscador */}
-        <div className="flex justify-center mt-6">
-          <div className="flex items-center space-x-2">
-            <Input
-              placeholder="Buscar..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-80"
-            />
-            <Button onClick={handleSearchClick}>
-              <Search size={20} />
-            </Button>
-            <SelectFiltro value={filtro} onChange={setFiltro} />
-          </div>
-        </div>
-
-        {/* Carrusel con props de filtrado */}
-        <div className="mt-10">
-          <Carousel search={search} filtro={filtro} />
+        {/* Carrusel */}
+        <div className="mt-4 px-6">
+          <Carousel />
         </div>
 
         {/* Recomendaciones */}

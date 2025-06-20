@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, HeartOff } from 'lucide-react';
@@ -58,6 +57,7 @@ export default function ListCardEvent({ image, title, id_evento, isFavorite }) {
   return (
     <div className="relative bg-white rounded-xl shadow-md overflow-hidden w-96 m-4 border hover:shadow-lg transition duration-300">
       <img src={image} alt={title} className="w-full h-56 object-cover" />
+      
       <button
         className="absolute top-3 right-3 text-red-500 text-xl"
         onClick={toggleHeart}
@@ -67,6 +67,13 @@ export default function ListCardEvent({ image, title, id_evento, isFavorite }) {
 
       <div className="p-4 flex flex-col items-center">
         <h3 className="text-xl font-semibold text-center">{title}</h3>
+
+        <button
+          onClick={() => navigate(`/event-details/${id_evento}`)}
+          className="mt-4 px-4 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow-sm transition"
+        >
+          Ver más
+        </button>
       </div>
     </div>
   );

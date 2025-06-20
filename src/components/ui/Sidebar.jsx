@@ -118,6 +118,15 @@ export default function Sidebar({ isOpen, onClose }) {
                                     💳 Métodos de pago
                                 </a>
                             </li>
+                            <li>
+                                <a
+                                    href="/manage-notifications"
+                                    className="block text-sm font-normal text-blue-700 hover:underline rounded"
+                                    style={{ fontFamily: "inherit" }}
+                                >
+                                    ✉️ Notificaciones
+                                </a>
+                            </li>
                         </ul>
                     </section>
 

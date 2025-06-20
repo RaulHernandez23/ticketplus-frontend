@@ -4,8 +4,6 @@ import TopBar from '../components/ui/TopBar';
 import ListCardEvent from '../components/ui/ListCardEvent';
 import FiltersSelect from '../components/ui/FiltersSelect';
 import Input from '../components/ui/Input';
-import Button from '../components/ui/Button';
-import { Search } from 'lucide-react';
 
 export default function Events() {
   const navigate = useNavigate();
@@ -15,7 +13,6 @@ export default function Events() {
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
 
-  // Obtener eventos al montar el componente
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -50,7 +47,6 @@ export default function Events() {
     fetchEvents();
   }, []);
 
-  // Filtrar eventos en tiempo real
   useEffect(() => {
     const query = search.trim().toLowerCase();
 
@@ -79,9 +75,26 @@ export default function Events() {
       <TopBar />
 
       <div className="w-full px-8 py-6">
-        <h2 className="text-4xl font-bold text-center text-blue-800 mb-8">
-          Explora Eventos
-        </h2>
+        {/* Encabezado con botón de regresar */}
+        <div className="flex items-center justify-between mb-8 px-4">
+          <button
+            onClick={() => navigate('/search-event')}
+            className="bg-white rounded-full p-3 hover:scale-105 transition"
+          >
+            <img
+              src="/regresar.png"
+              alt="Regresar"
+              className="w-10 h-10"
+            />
+          </button>
+
+          <h2 className="text-4xl font-bold text-blue-800 text-center flex-grow text-center">
+            Explora Eventos
+          </h2>
+
+          {/* Espacio fantasma para balancear el layout */}
+          <div className="w-16" />
+        </div>
 
         {/* Buscador */}
         <div className="flex justify-center mt-6">
@@ -107,16 +120,6 @@ export default function Events() {
               isFavorite={event.isFavorite}
             />
           ))}
-        </div>
-
-        {/* Botón de regreso */}
-        <div className="flex justify-center mt-10">
-          <button
-            onClick={() => navigate('/search-event')}
-            className="px-6 py-2 bg-[#6C63FF] hover:bg-[#574fd1] text-white font-semibold rounded-lg shadow-md transition"
-          >
-            Regresar
-          </button>
         </div>
       </div>
     </div>
