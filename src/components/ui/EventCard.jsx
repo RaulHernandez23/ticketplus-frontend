@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const defaultBanner = "/Soon.png";
 
 export default function EventCard({ offset }) {
   const [evento, setEvento] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/eventos?limit=1&offset=${offset}`)
@@ -44,10 +46,6 @@ export default function EventCard({ offset }) {
     );
   }
 
-  const bannerSrc = evento.banner_url.startsWith("data:")
-    ? evento.banner_url
-    : `data:image/png;base64,${evento.banner_url}`;
-
   return (
     <div className="border rounded p-4">
       <img
@@ -56,7 +54,10 @@ export default function EventCard({ offset }) {
         className="w-full h-40 object-cover mb-4"
       />
       <h3 className="text-lg font-semibold mb-2">{evento.titulo}</h3>
-      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+      <button
+        onClick={() => navigate(`/event-details/${evento.id_evento}`)}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+      >
         Ver más
       </button>
     </div>
