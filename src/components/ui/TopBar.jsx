@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ImTicket } from "react-icons/im";
-import { GiMicrophone } from "react-icons/gi";
 import { FaQuestion, FaUser } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 
@@ -9,18 +8,18 @@ export default function TopBar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+
+  // Solo muestra "Eventos" si hay token
   const buttons = [
-    { label: "Eventos", icon: <ImTicket size={20} color="#2D3FBD" />, route: "/events" },
+    ...(token
+      ? [{ label: "Eventos", icon: <ImTicket size={20} color="#2D3FBD" />, route: "/events" }]
+      : []),
     { label: "Soporte", icon: <FaQuestion size={20} color="#2D3FBD" /> },
   ];
 
   const handleUserClick = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setSidebarOpen(true);
-    } else {
-      navigate("/iniciar-sesion");
-    }
+    setSidebarOpen(true);
   };
 
   const handleLogoClick = () => {
@@ -29,6 +28,10 @@ export default function TopBar() {
 
   const handleSupportClick = () => {
     navigate("/ayuda");
+  };
+
+  const handleLoginClick = () => {
+    navigate("/iniciar-sesion");
   };
 
   return (
@@ -67,18 +70,28 @@ export default function TopBar() {
               </div>
             ))}
           </div>
-          {/* Botón de perfil con lógica de login/sidebar */}
-          <button
-            className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-transparent ml-2"
-            onClick={handleUserClick}
-            type="button"
-            aria-label="Abrir menú de usuario"
-          >
-            <span className="absolute w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white"></span>
-            <span className="relative z-10 flex items-center justify-center">
-              <FaUser size={24} color="#2D3FBD" className="sm:w-7 sm:h-7" />
-            </span>
-          </button>
+          {/* Botón de perfil o iniciar sesión */}
+          {token ? (
+            <button
+              className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-transparent ml-2"
+              onClick={handleUserClick}
+              type="button"
+              aria-label="Abrir menú de usuario"
+            >
+              <span className="absolute w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white"></span>
+              <span className="relative z-10 flex items-center justify-center">
+                <FaUser size={24} color="#2D3FBD" className="sm:w-7 sm:h-7" />
+              </span>
+            </button>
+          ) : (
+            <button
+              className="ml-4 px-5 py-2 rounded-full bg-white text-[#2D3FBD] font-bold shadow hover:bg-blue-100 transition text-sm sm:text-base"
+              onClick={handleLoginClick}
+              type="button"
+            >
+              Iniciar sesión
+            </button>
+          )}
         </nav>
       </header>
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
