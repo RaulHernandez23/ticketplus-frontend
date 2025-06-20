@@ -112,7 +112,7 @@ export default function Sidebar({ isOpen, onClose }) {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/payment-methods"
                   className="block text-sm font-normal text-blue-700 hover:underline rounded"
                   style={{ fontFamily: "inherit" }}
                 >
