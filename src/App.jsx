@@ -27,6 +27,8 @@ import EventDetails from "./pages/EventDetails";
 import Events from "./pages/Events";
 import ViewProfile from "./pages/ViewProfile";
 import EventReview from "./pages/EventReview";
+import ChooseSeat from "./pages/ChooseSeat";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -73,6 +75,8 @@ function App() {
           path="/ayuda/:categoryKey/:questionId"
           element={<HelpQuestion />}
         />
+        <Route path="/choose-seat/:id_funcion" element={<ChooseSeat />} />
+        <Route path="/checkout/" element={<Checkout />} />
       </Routes>
     </Router>
   );
