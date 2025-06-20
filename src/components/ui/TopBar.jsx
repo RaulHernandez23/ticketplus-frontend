@@ -10,7 +10,7 @@ export default function TopBar() {
   const navigate = useNavigate();
 
   const buttons = [
-    { label: "Eventos", icon: <ImTicket size={20} color="#2D3FBD" /> },
+    { label: "Eventos", icon: <ImTicket size={20} color="#2D3FBD" />, route: "/events" },
     { label: "Artistas", icon: <GiMicrophone size={20} color="#2D3FBD" /> },
     { label: "Soporte", icon: <FaQuestion size={20} color="#2D3FBD" /> },
   ];
@@ -35,14 +35,12 @@ export default function TopBar() {
   return (
     <>
       <header className="flex justify-between items-center px-6 py-4 bg-[#2D3FBD] text-white">
-        {/* Logo con navegación */}
-        <h1
-          className="text-lg font-bold cursor-pointer select-none"
-          onClick={handleLogoClick}
-          title="Ir al menú principal"
-        >
-          TicketPlus
-        </h1>
+        <img
+          src="/TicketPlus_Logotipo.png" 
+          alt="TicketPlus Logo"
+          className="h-12 cursor-pointer"
+          onClick={() => navigate("/search-event")}
+        />
         <nav className="flex items-center">
           <div className="flex items-center space-x-12 mr-20">
             {buttons.map(({ label, icon }) => (
@@ -53,7 +51,7 @@ export default function TopBar() {
                   label === "Soporte"
                     ? handleSupportClick
                     : label === "Eventos"
-                    ? () => navigate("/buscar-evento")
+                    ? () => navigate("/events")
                     : undefined
                 }
                 title={label}
@@ -73,7 +71,7 @@ export default function TopBar() {
           {/* Botón de perfil con lógica de login/sidebar */}
           <button
             className="relative flex items-center justify-center w-12 h-12 bg-transparent"
-            onClick={handleUserClick}
+            onClick={() => handleUserClick(true)}
             type="button"
             aria-label="Abrir menú de usuario"
           >
