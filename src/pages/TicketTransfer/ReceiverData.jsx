@@ -34,9 +34,14 @@ export default function ReceiverData() {
     <div className="min-h-screen w-full bg-white">
       <TopBar />
       <div className="max-w-6xl mx-auto mt-10 px-4">
-        <span className="text-xs text-[#2D3FBD] underline mb-2 inline-block font-bold">
+        {/* Breadcrumb */}
+        <span
+          className="text-xs text-[#2D3FBD] underline mb-2 inline-block font-bold cursor-pointer"
+          onClick={() => navigate("/transferir-boleto")}
+        >
           Transferencia de boletos
         </span>
+        {/* Título principal */}
         <h1 className="text-5xl font-bold text-[#2D3FBD] mb-2 mt-2 leading-tight">
           Transferencia de boletos
         </h1>
